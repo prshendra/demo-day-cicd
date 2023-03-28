@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prshendra/golang-rest/handlers"
+	"github.com/prshendra/demo-day-cicd/handlers"
 )
 
 func main() {
