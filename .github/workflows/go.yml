@@ -31,3 +31,29 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: out/
+
+    - name: Stop service
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.SSH_SERVER }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: sudo service golang-rest stop
+
+    - name: Deploy to server
+      uses: burnett01/rsync-deployments@5.2.1
+      with:
+        switches: -avzr --delete
+        path: out/
+        remote_path: ${{ secrets.REMOTE_PATH }}
+        remote_host: ${{ secrets.SSH_SERVER }}
+        remote_user: ${{ secrets.SSH_USER }}
+        remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Start service
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.SSH_SERVER }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: sudo service golang-rest start
